@@ -10,18 +10,18 @@ mongoose
   .then(() => console.log("Connected to MongoDB"))
   .catch((err) => console.log(err.message));
 
-const PORT = 3000;
+const PORT = 3003;
 const app = express();
 
 app.use(express.json());
 app.use("/api/user", userRouter);
-app.use("/api/user", authRouter);
+app.use("/api/auth", authRouter);
 
 app.use((err, req, res, next) => {
   const statusCode = err.statusCode || 500;
   const message = err.message || "Internal Server Error!";
 
-  res.status(statusCode).json({
+  return res.status(statusCode).json({
     success: "false",
     statusCode,
     message,
