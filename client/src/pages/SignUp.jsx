@@ -66,7 +66,7 @@ const SignUp = () => {
           onChange={handleChange}
         />
         <input
-          type="text"
+          type="password"
           className="border border-black/20 rounded-lg p-3"
           placeholder="password"
           id="password"
@@ -81,7 +81,7 @@ const SignUp = () => {
       </form>
       <div className="flex mt-5 gap-2">
         <p className="">Have an account?</p>
-        <Link to={"/sign-in"}>
+        <Link to={"/signin"}>
           <span className="text-blue-700 hover:opacity-70">Sign In</span>
         </Link>
       </div>

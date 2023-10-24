@@ -20,7 +20,7 @@ const Header = () => {
           <FaSearch className="text-slate-700" size={20} />
         </form>
         <div className="flex sm:gap-8 items-center">
-          <Link to={"./sign-in"}>
+          <Link to={"./signin"}>
             <h1 className="text-slate-700 hover:underline cursor-pointer text-md  sm:text-lg">
               Sign In
             </h1>
