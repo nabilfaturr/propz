@@ -38,7 +38,7 @@ export const signin = async (req, res, next) => {
 
     console.log(validUser._doc);
 
-    const {password: pass, ...rest} = await validUser._doc;
+    const { password: pass, ...rest } = await validUser._doc;
 
     const token = jwt.sign(
       validUser._id.toString(),
@@ -49,6 +49,66 @@ export const signin = async (req, res, next) => {
       .cookie("access-token", token, { httpOnly: true })
       .status(200)
       .json(rest);
+  } catch (error) {
+    next(error);
+  }
+};
+
+export const google = async (req, res, next) => {
+  try {
+    const user = await User.findOne({ email: req.body.email });
+
+    // udah sign up
+    if (user) {
+      const token = jwt.sign(user._id.toString(), process.env.JWT_SECRET_KEY);
+
+      const { password: pass, ...rest } = user._doc;
+
+      res
+        .cookie("access-token", token, { httpOnly: true })
+        .status(200)
+        .json(rest);
+    }
+
+    // belum sign up
+    else {
+      const { username, email, photo } = req.body;
+
+      const password =
+        Math.random().toString(36).slice(-8) +
+        Math.random().toString(36).slice(-8);
+
+      const hashedPassword = await bcrypsjs.hash(password, 10);
+
+      const finalUsername =
+        username.split(" ").join("").toLowerCase() +
+        Math.random().toString(36).slice(-4);
+      console.log(password);
+
+      console.log(`username : ${finalUsername}`);
+      console.log(`password : ${hashedPassword}`);
+
+      const newUser = new User({
+        username: finalUsername,
+        password: hashedPassword,
+        email,
+        photo,
+      });
+
+      await newUser.save();
+
+      const { password: pass, ...rest } = await newUser._doc;
+
+      const token = jwt.sign(
+        newUser._id.toString(),
+        process.env.JWT_SECRET_KEY
+      );
+
+      res
+        .cookie("access-token", token, { httpOnly: true })
+        .status(200)
+        .json(rest);
+    }
   } catch (error) {
     next(error);
   }
