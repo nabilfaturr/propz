@@ -14,8 +14,8 @@ mongoose
 const PORT = 3003;
 const app = express();
 
-app.use(express.json());
 app.use(cookieParser());
+app.use(express.json());
 app.use("/api/user", userRouter);
 app.use("/api/auth", authRouter);
 
