@@ -11,11 +11,13 @@ import {
   updateUserFailure,
   updateUserSuccess,
   updateUserStart,
-  signInFailure,
-  signInSuccess,
+  deleteUserFailure,
+  deleteUserStart,
+  deleteUserSuccess,
 } from "./../redux/user/userSlice";
 
 import { app } from "../firebase";
+import { disconnect } from "mongoose";
 
 const Profile = () => {
   const dispatch = useDispatch();
@@ -65,6 +67,24 @@ const Profile = () => {
     });
   };
 
+  const handleDeleteUser = async () => {
+    try {
+      const response = await fetch(`/api/user/delete/${currentUser._id}`, {
+        method: "DELETE",
+      });
+      const data = await response.json();
+
+      if (data.success === "false") {
+        dispatch(deleteUserFailure(data.message));
+        return;
+      }
+
+      dispatch(deleteUserSuccess(data));
+    } catch (error) {
+      dispatch(deleteUserFailure(error.message));
+    }
+  };
+
   const handleSubmitForm = async (e) => {
     e.preventDefault();
 
@@ -82,7 +102,6 @@ const Profile = () => {
       const data = await response.json();
 
       if (data.success === "false") {
-        console.log("iya maaf aku salahh");
         dispatch(updateUserFailure(data.message));
         return;
       }
@@ -159,7 +178,10 @@ const Profile = () => {
         </button>
       </form>
       <div className="flex justify-between my-5">
-        <span className="text-red-600 hover:opacity-70 cursor-pointer">
+        <span
+          className="text-red-600 hover:opacity-70 cursor-pointer"
+          onClick={handleDeleteUser}
+        >
           Delete Account
         </span>
         <span className="text-red-600 hover:opacity-70 cursor-pointer">
