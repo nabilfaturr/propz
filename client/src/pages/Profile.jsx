@@ -113,6 +113,25 @@ const Profile = () => {
     }
   };
 
+  const handleSignOut = async () => {
+    try {
+      const response = await fetch("/api/auth/signout", {
+        method: "GET",
+      });
+
+      const data = await response.json();
+
+      if (data.success === "false") {
+        dispatch(deleteUserFailure(data.message));
+        return;
+      }
+
+      dispatch(deleteUserSuccess());
+    } catch (error) {
+      dispatch(deleteUserFailure(error.message));
+    }
+  };
+
   return (
     <div className="p-3 max-w-lg mx-auto">
       <h1 className="text-center text-4xl my-5 font-bold text-slate-700">
@@ -184,7 +203,10 @@ const Profile = () => {
         >
           Delete Account
         </span>
-        <span className="text-red-600 hover:opacity-70 cursor-pointer">
+        <span
+          className="text-red-600 hover:opacity-70 cursor-pointer"
+          onClick={handleSignOut}
+        >
           Sign Out
         </span>
       </div>
