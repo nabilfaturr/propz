@@ -6,6 +6,7 @@ import {
   ref,
   uploadBytesResumable,
 } from "firebase/storage";
+import { Link } from "react-router-dom";
 
 import {
   updateUserFailure,
@@ -195,6 +196,13 @@ const Profile = () => {
         >
           {loading ? "LOADING..." : "UPDATE"}
         </button>
+        <Link
+          className="bg-green-700 p-3 text-center text-white font-bold text-lg rounded-lg hover:bg-opacity-95 disabled:bg-opacity-70"
+          type="submit"
+          to={"/create-listing"}
+        >
+          CREATE LISTING
+        </Link>
       </form>
       <div className="flex justify-between my-5">
         <span
