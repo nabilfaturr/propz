@@ -140,7 +140,7 @@ const CreateListing = () => {
       }
 
       setLoading(true);
-      // setError(false);
+      setError(false);
 
       const response = await fetch("/api/listing/create", {
         method: "POST",
