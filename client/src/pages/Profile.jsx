@@ -305,11 +305,14 @@ const Profile = () => {
                 <p className="font-medium text-sm">{list.name}</p>
               </div>
               <div className="flex gap-3 flex-col">
-                <button className="w-16 rounded-lg text-white text-sm font-medium bg-green-700 px-2 py-1 hover:opacity-90">
+                <Link
+                  className="w-[66px] rounded-lg text-white text-sm font-medium bg-green-700 px-2 py-1 hover:opacity-90"
+                  to={`/update-listing/${list._id}`}
+                >
                   Update
-                </button>
+                </Link>
                 <button
-                  className="w-16 rounded-lg text-white text-sm font-medium bg-red-700 px-2 py-1 hover:opacity-90"
+                  className="w-[66px] rounded-lg text-white text-sm font-medium bg-red-700 px-2 py-1 hover:opacity-90"
                   type="button"
                   onClick={() => {
                     handleDeleteListing(list._id);
