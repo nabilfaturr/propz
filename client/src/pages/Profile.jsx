@@ -18,13 +18,15 @@ import {
 } from "./../redux/user/userSlice";
 
 import { app } from "../firebase";
-import { disconnect } from "mongoose";
 
 const Profile = () => {
   const dispatch = useDispatch();
   const fileRef = useRef(null);
   const { currentUser, loading, error } = useSelector((state) => state.user);
   const [updateSuccess, setUpdateSuccess] = useState(false);
+  const [loadingShowListing, setLoadingShowListing] = useState(false);
+  const [errorShowListing, setErrorShowListing] = useState(false);
+  const [userListing, setUserListing] = useState([]);
   const [file, setFile] = useState(undefined);
   const [formData, setFormData] = useState({});
   const [filePerc, setFilePerc] = useState(0);
@@ -35,6 +37,12 @@ const Profile = () => {
       handleFileUpload(file);
     }
   }, [file]);
+
+  useEffect(() => {
+    if (userListing) {
+      userListing.map((list, id) => console.log(list._id));
+    }
+  }, [userListing]);
 
   const handleFileUpload = (file) => {
     const storage = getStorage(app);
@@ -133,8 +141,54 @@ const Profile = () => {
     }
   };
 
+  const handleShowListing = async () => {
+    try {
+      setLoadingShowListing(true);
+      setErrorShowListing(false);
+
+      const response = await fetch(`/api/user/listings/${currentUser._id}`);
+      const data = await response.json();
+
+      if (data.success === "false") {
+        return setErrorShowListing(error.message);
+      }
+
+      console.log(data);
+
+      setLoadingShowListing(false);
+      setErrorShowListing(false);
+      setUserListing(data);
+    } catch (error) {
+      setErrorShowListing(error.message);
+      setLoadingShowListing(false);
+    }
+  };
+
+  const handleDeleteListing = async (listID) => {
+    try {
+      console.log(listID);
+      const response = await fetch(`/api/listing/delete/${listID}`, {
+        method: "DELETE",
+      });
+
+      const data = await response.json();
+
+      if (data.success === false) {
+        return console.log(data.message);
+      }
+
+      setUserListing((prev) =>
+        prev.filter((listing) => listing._id !== listID)
+      );
+
+      console.log(data);
+    } catch (error) {
+      console.log(error);
+    }
+  };
+
   return (
-    <div className="p-3 max-w-lg mx-auto">
+    <div className="p-3 max-w-xl mx-auto">
       <h1 className="text-center text-4xl my-5 font-bold text-slate-700">
         Profile
       </h1>
@@ -218,10 +272,56 @@ const Profile = () => {
           Sign Out
         </span>
       </div>
-      <p className="font-bold text-green-600">
-        {updateSuccess ? "Update Successful" : ""}
-      </p>
-      <p className="font-bold text-red-600">{error ? error : ""}</p>
+      <div className="flex flex-col">
+        <p className="font-bold text-green-600">
+          {updateSuccess ? "Update Successful" : ""}
+        </p>
+        <p className="font-bold text-red-600">{error ? error : ""}</p>
+        <button
+          className="px-4 py-2 border border-green-500 inline rounded-lg self-center text-green-600 hover:shadow-md"
+          type="button"
+          disabled={loadingShowListing}
+          onClick={handleShowListing}
+        >
+          {loadingShowListing ? "Loading..." : "Show Listing"}
+        </button>
+        <p className="font-bold text-red-600">
+          {errorShowListing ? errorShowListing : ""}
+        </p>
+      </div>
+      {userListing && userListing.length > 0 && (
+        <div className="mt-10">
+          {userListing.map((list) => (
+            <div
+              key={list._id}
+              className="border border-black/10 hover:shadow-md p-3 items-center flex justify-between gap-2 mb-3 rounded-lg"
+            >
+              <div className="flex  gap-2 items-center">
+                <img
+                  src={list.imageUrls[0]}
+                  alt=""
+                  className="w-40 object-cover h-20 rounded-lg"
+                />
+                <p className="font-medium text-sm">{list.name}</p>
+              </div>
+              <div className="flex gap-3 flex-col">
+                <button className="w-16 rounded-lg text-white text-sm font-medium bg-green-700 px-2 py-1 hover:opacity-90">
+                  Update
+                </button>
+                <button
+                  className="w-16 rounded-lg text-white text-sm font-medium bg-red-700 px-2 py-1 hover:opacity-90"
+                  type="button"
+                  onClick={() => {
+                    handleDeleteListing(list._id);
+                  }}
+                >
+                  Delete
+                </button>
+              </div>
+            </div>
+          ))}
+        </div>
+      )}
     </div>
   );
 };
