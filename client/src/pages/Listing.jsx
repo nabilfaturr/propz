@@ -4,6 +4,15 @@ import { Swiper, SwiperSlide } from "swiper/react";
 import SwiperCore from "swiper";
 import { Navigation } from "swiper/modules";
 import "swiper/css/bundle";
+import {
+  FaBath,
+  FaBed,
+  FaChair,
+  FaMapMarkedAlt,
+  FaMapMarkerAlt,
+  FaParking,
+  FaShare,
+} from "react-icons/fa";
 
 const Listing = () => {
   SwiperCore.use([Navigation]);
@@ -22,6 +31,7 @@ const Listing = () => {
 
         if (data.success === "false") {
           setError(true);
+          setLoading(false);
           return console.log(data.message);
         }
 
@@ -43,25 +53,84 @@ const Listing = () => {
         <p className="text-center my-7 text-2xl font-bold">Loading...</p>
       )}
       {error && (
-        <p className="text-center my-7 text-2xl font-bold">
+        <p className="text-center my-7 text-2xl font-bold text-red-600">
           Something went wrong...
         </p>
       )}
       {formData && formData.imageUrls && !loading && !error && (
         <div>
-          <Swiper navigation>
-            {formData.imageUrls.map((url) => (
-              <SwiperSlide key={url}>
-                <div
-                  className="h-[550px] rounded-lg"
-                  style={{
-                    background: `url(${url}) center no-repeat`,
-                    backgroundSize: "cover",
-                  }}
-                ></div>
-              </SwiperSlide>
-            ))}
-          </Swiper>
+          <div>
+            <Swiper navigation>
+              {formData.imageUrls.map((url) => (
+                <SwiperSlide key={url}>
+                  <div
+                    className="h-[450px] rounded-lg"
+                    style={{
+                      background: `url(${url}) center no-repeat`,
+                      backgroundSize: "cover",
+                    }}
+                  ></div>
+                </SwiperSlide>
+              ))}
+            </Swiper>
+          </div>
+          <div className="text-lg">
+            <p className="my-3">
+              <span className="font-semibold">{formData.name}</span>
+              <span className="mx-2">-</span>
+              <span className="font-bold">
+                ${+formData.regularPrice - +formData.discountPrice}/month
+              </span>
+            </p>
+            <div className="flex my-3">
+              <div className="border border-black flex items-center gap-2 p-2 rounded-lg">
+                <FaMapMarkerAlt className="text-green-800" size={22} />
+                <span className="font-medium">{formData.address}</span>
+              </div>
+            </div>
+            <p className="my-5">
+              <span className="font-semibold px-4 py-2 rounded-lg text-white bg-red-700 mr-3">
+                {formData.type === "rent" ? "For Rent" : "For Sell"}
+              </span>
+              <span className="font-semibold px-4 py-2 rounded-lg text-white bg-green-700 mr-3">
+                ${formData.discountPrice} Discount
+              </span>
+            </p>
+            <p>
+              <span className="font-bold">Description - </span>
+              <span className="text-slate-800">{formData.description}</span>
+            </p>
+            <div className="text-green-800 flex justify-between my-3">
+              <div className="flex gap-2 items-center">
+                <FaBed />
+                <p className="font-medium">
+                  {+formData.bathrooms > 1
+                    ? `${formData.bedrooms} Beds`
+                    : `${formData.bedrooms} Bed`}{" "}
+                </p>
+              </div>
+              <div className="flex gap-2 items-center">
+                <FaBath />
+                <p className="font-medium">
+                  {+formData.bathrooms > 1
+                    ? `${formData.bathrooms} Baths`
+                    : `${formData.bathrooms} Bath`}{" "}
+                </p>
+              </div>
+              <div className="flex gap-2 items-center">
+                <FaParking />
+                <p className="font-medium">
+                  {formData.parking ? "Parking Spot" : "No Parking"}
+                </p>
+              </div>
+              <div className="flex gap-2 items-center">
+                <FaChair />
+                <p className="font-medium">
+                  {formData.furnished ? "Furnished" : "Unfurnished"}
+                </p>
+              </div>
+            </div>
+          </div>
         </div>
       )}
     </main>
