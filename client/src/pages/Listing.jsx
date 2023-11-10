@@ -13,6 +13,8 @@ import {
   FaParking,
   FaShare,
 } from "react-icons/fa";
+import { useSelector } from "react-redux";
+import Contact from "../components/Contact";
 
 const Listing = () => {
   SwiperCore.use([Navigation]);
@@ -20,6 +22,8 @@ const Listing = () => {
   const [formData, setFormData] = useState({});
   const [loading, setLoading] = useState(false);
   const [error, setError] = useState(false);
+  const [contact, setContact] = useState(false);
+  const { currentUser } = useSelector((state) => state.user);
 
   useEffect(() => {
     const fetchingData = async () => {
@@ -48,7 +52,7 @@ const Listing = () => {
   }, [params.listingID]);
 
   return (
-    <main className="max-w-3xl mx-auto p-3">
+    <main className="max-w-4xl mx-auto p-3">
       {loading && (
         <p className="text-center my-7 text-2xl font-bold">Loading...</p>
       )}
@@ -103,7 +107,7 @@ const Listing = () => {
             <div className="text-green-800 flex justify-between my-3">
               <div className="flex gap-2 items-center">
                 <FaBed />
-                <p className="font-medium">
+                <p className="">
                   {+formData.bathrooms > 1
                     ? `${formData.bedrooms} Beds`
                     : `${formData.bedrooms} Bed`}{" "}
@@ -111,26 +115,36 @@ const Listing = () => {
               </div>
               <div className="flex gap-2 items-center">
                 <FaBath />
-                <p className="font-medium">
+                <p className="">
                   {+formData.bathrooms > 1
                     ? `${formData.bathrooms} Baths`
-                    : `${formData.bathrooms} Bath`}{" "}
+                    : `${formData.bathrooms} Bath`}
                 </p>
               </div>
               <div className="flex gap-2 items-center">
                 <FaParking />
-                <p className="font-medium">
+                <p className="">
                   {formData.parking ? "Parking Spot" : "No Parking"}
                 </p>
               </div>
               <div className="flex gap-2 items-center">
                 <FaChair />
-                <p className="font-medium">
+                <p className="">
                   {formData.furnished ? "Furnished" : "Unfurnished"}
                 </p>
               </div>
             </div>
           </div>
+          {currentUser && formData.userRef !== currentUser._id && !contact && (
+            <button
+              className="text-lg bg-slate-800 w-full text-white font-semibold my-3 px-4 py-2 rounded-lg"
+              type="button"
+              onClick={() => setContact(true)}
+            >
+              Contact Landlord
+            </button>
+          )}
+          {contact && <Contact listing={formData} />}
         </div>
       )}
     </main>

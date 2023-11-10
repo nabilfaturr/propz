@@ -38,12 +38,6 @@ const Profile = () => {
     }
   }, [file]);
 
-  useEffect(() => {
-    if (userListing) {
-      userListing.map((list, id) => console.log(list._id));
-    }
-  }, [userListing]);
-
   const handleFileUpload = (file) => {
     const storage = getStorage(app);
     const fileName = new Date().getTime() + file.name;
@@ -61,7 +55,6 @@ const Profile = () => {
       },
       (error) => setfileUploadError(true),
       () => {
-        console.log(uploadTask.snapshot);
         getDownloadURL(uploadTask.snapshot.ref).then((downloadURL) => {
           setFormData({ ...formData, avatar: downloadURL });
         });
@@ -153,8 +146,6 @@ const Profile = () => {
         return setErrorShowListing(error.message);
       }
 
-      console.log(data);
-
       setLoadingShowListing(false);
       setErrorShowListing(false);
       setUserListing(data);
@@ -166,7 +157,6 @@ const Profile = () => {
 
   const handleDeleteListing = async (listID) => {
     try {
-      console.log(listID);
       const response = await fetch(`/api/listing/delete/${listID}`, {
         method: "DELETE",
       });
@@ -294,7 +284,7 @@ const Profile = () => {
           {userListing.map((list) => (
             <div
               key={list._id}
-              className="border border-black/10 hover:shadow-md p-3 items-center flex justify-between gap-2 mb-3 rounded-lg"
+              className="border border-black/10 hover:shadow-md p-2 items-center flex justify-between gap-2 mb-3 rounded-lg"
             >
               <div className="flex  gap-2 items-center">
                 <img
@@ -302,7 +292,12 @@ const Profile = () => {
                   alt=""
                   className="w-40 object-cover h-20 rounded-lg"
                 />
-                <p className="font-medium text-sm">{list.name}</p>
+                <Link
+                  to={`/listing/${list._id}`}
+                  className="font-medium hover:underline"
+                >
+                  {list.name}
+                </Link>
               </div>
               <div className="flex gap-3 flex-col">
                 <Link

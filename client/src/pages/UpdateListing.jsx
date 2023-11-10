@@ -40,17 +40,12 @@ const CreateListing = () => {
         const data = await response.json();
 
         setFormData(data);
-        console.log(formData);
       } catch (error) {
         console.log(error);
       }
     };
     fetchingData();
   }, []);
-
-  useEffect(() => {
-    console.log(formData);
-  }, [formData]);
 
   const handleImageUpload = async () => {
     if (files.length >= 1 && files.length + formData.imageUrls.length <= 6) {
@@ -75,7 +70,6 @@ const CreateListing = () => {
       setImageUploadError("Go upload some file");
       setUploading(false);
     } else {
-      console.log("im here!");
       setImageUploadError("You can only upload 6 image per listing");
       setUploading(false);
     }
@@ -170,9 +164,6 @@ const CreateListing = () => {
       });
 
       const data = await response.json();
-
-      console.log(data);
-
       if (data.success === "false") {
         return setError(data.message);
       }
