@@ -134,6 +134,10 @@ const CreateListing = () => {
         return setError("Discount price must be lower than regular price!");
       }
 
+      if (!formData.offer) {
+        formData.discountPrice = 0;
+      }
+
       setLoading(true);
       setError(false);
 
@@ -299,22 +303,24 @@ const CreateListing = () => {
                 <span className="text-xs">($ / month)</span>
               </div>
             </div>
-            <div className="flex items-center gap-2">
-              <input
-                type="number"
-                id="discountPrice"
-                min="0"
-                max="10000000"
-                value={formData.discountPrice}
-                onChange={handleChange}
-                required
-                className="p-3 border border-gray-300 rounded-lg"
-              />
-              <div className="flex flex-col items-center">
-                <p>Discounted price</p>
-                <span className="text-xs">($ / month)</span>
+            {formData.offer && (
+              <div className="flex items-center gap-2">
+                <input
+                  type="number"
+                  id="discountPrice"
+                  min="0"
+                  max="10000000"
+                  value={formData.discountPrice}
+                  onChange={handleChange}
+                  required
+                  className="p-3 border border-gray-300 rounded-lg"
+                />
+                <div className="flex flex-col items-center">
+                  <p>Discounted price</p>
+                  <span className="text-xs">($ / month)</span>
+                </div>
               </div>
-            </div>
+            )}
           </div>
         </div>
         <div className="flex flex-col flex-1 gap-4 my-6 sm:my-0">
