@@ -6,6 +6,7 @@ export default function Search() {
   const navigate = useNavigate();
   const [listings, setListings] = useState([]);
   const [loading, setLoading] = useState(false);
+  const [showMore, setShowMore] = useState(false);
   const [sidebardata, setSidebardata] = useState({
     searchTerm: "",
     type: "all",
@@ -16,9 +17,26 @@ export default function Search() {
     order: "desc",
   });
 
+  // useEffect(() => {
+  //   (listings.length > 11 ? setShowMore(true) : setShowMore(false))
+  // }, [listings.length]);
+
   useEffect(() => {
     console.log(listings);
   }, [listings]);
+
+  const onShowMoreClick = async () => {
+    const startIndex = listings.length;
+    const urlParams = new URLSearchParams(location.search);
+    urlParams.set("startIndex", startIndex);
+    const searchQuery = urlParams.toString();
+    const res = await fetch(`/api/listing/get-all-listing?${searchQuery}`);
+    const data = await res.json();
+    if (data.length < 12) {
+      setShowMore(false);
+    }
+    setListings([...listings, ...data]);
+  };
 
   useEffect(() => {
     const urlParams = new URLSearchParams(location.search);
@@ -55,6 +73,9 @@ export default function Search() {
       const searchQuery = urlParams.toString();
       const res = await fetch(`/api/listing/get-all-listing?${searchQuery}`);
       const data = await res.json();
+      if (data.length > 11) {
+        setShowMore(true);
+      }
       setListings(data);
       setLoading(false);
     };
@@ -217,7 +238,7 @@ export default function Search() {
         <h1 className="text-3xl font-semibold border-b p-3 text-slate-700 mt-5">
           Listing results:
         </h1>
-        <div className="grid grid-cols-2 lg:grid-cols-3 xl:grid-cols-4 gap-5 p-3">
+        <div className="grid grid-cols-2 lg:grid-cols-3 2xl:grid-cols-4 gap-4 p-3">
           {!loading && listings.length === 0 && (
             <p className="text-center text-slate-700 text-2xl font-bold mt-10">
               No listing found!
@@ -234,6 +255,18 @@ export default function Search() {
               return <ListingCard key={listing._id} listing={listing} />;
             })}
         </div>
+        {showMore && (
+          <div className="my-3 flex justify-center">
+            <button
+              onClick={() => {
+                onShowMoreClick();
+              }}
+              className="bg-slate-700 text-white px-4 py-2 text-center rounded-md hover:opacity-90"
+            >
+              Show More
+            </button>
+          </div>
+        )}
       </div>
     </div>
   );

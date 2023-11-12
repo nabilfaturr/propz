@@ -8,7 +8,7 @@ const ListingCard = ({ key, listing }) => {
       <Link to={`/listing/${listing._id}`}>
         <img
           src={listing.imageUrls[0]}
-          className="h-[320px] sm:h-[200px] w-full object-cover hover:scale-105 transition-scale duration-200"
+          className="h-[150px] sm:h-[200px] w-full object-cover hover:scale-105 transition-scale duration-200"
         />
         <div className="flex flex-col p-3 gap-3">
           <p className="truncate text-slate-800 font-semibold">
