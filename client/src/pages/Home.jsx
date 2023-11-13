@@ -54,8 +54,8 @@ export default function Home() {
   return (
     <div className="max-w-6xl mx-auto">
       {/* top */}
-      <div className="h-[94vh] flex flex-col justify-center items-center text-black">
-        <div className="flex justify-center flex-col text-center gap-5 p-2">
+      <div className="h-[94vh] flex flex-col justify-center items-center text-black relative -top-[46px] p-15">
+        <div className="flex justify-center flex-col text-center gap-5 p-3">
           <h1 className="text-black-800 font-bold text-3xl sm:text-5xl lg:text-6xl">
             <span className="relative">Find your next perfect</span>
             <br />
