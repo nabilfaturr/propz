@@ -5,7 +5,10 @@ import dotenv from "dotenv";
 import userRouter from "./routes/user.route.js";
 import authRouter from "./routes/auth.route.js";
 import listingRouter from "./routes/listing.route.js";
+import path from "path";
 dotenv.config();
+
+const __dirname = path.resolve();
 
 mongoose
   .connect(process.env.MONGO)
@@ -31,6 +34,11 @@ app.use((err, req, res, next) => {
     statusCode,
     message,
   });
+});
+
+app.use(express.static(path.join(__dirname, "/client/dist")));
+app.get("*", (req, res) => {
+  res.sendFile(path.join(__dirname, "client", "dist", "index.html"));
 });
 
 app.listen(PORT, () => {
