@@ -33,7 +33,7 @@ const Header = () => {
       <div className="flex justify-between items-center mx-auto px-3 py-5 gap-3 max-w-[1200px]">
         <Link to={"./"}>
           <h1 className="text-lg xs:text-xl font-extrabold sm:text-2xl text-blue-900 cursor-pointer">
-            propertX
+            Propz
           </h1>
         </Link>
         <form

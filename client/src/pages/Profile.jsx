@@ -170,8 +170,6 @@ const Profile = () => {
       setUserListing((prev) =>
         prev.filter((listing) => listing._id !== listID)
       );
-
-      console.log(data);
     } catch (error) {
       console.log(error);
     }

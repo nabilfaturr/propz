@@ -104,7 +104,7 @@ const Listing = () => {
               <span className="font-bold">Description - </span>
               <span className="text-slate-800">{formData.description}</span>
             </p>
-            <div className="text-green-800 flex justify-between my-3">
+            <div className="text-green-800 flex justify-between my-3 text-[16px]">
               <div className="flex gap-2 items-center">
                 <FaBed />
                 <p className="">

@@ -21,10 +21,6 @@ export default function Search() {
   //   (listings.length > 11 ? setShowMore(true) : setShowMore(false))
   // }, [listings.length]);
 
-  useEffect(() => {
-    console.log(listings);
-  }, [listings]);
-
   const onShowMoreClick = async () => {
     const startIndex = listings.length;
     const urlParams = new URLSearchParams(location.search);

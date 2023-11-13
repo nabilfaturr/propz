@@ -2,7 +2,7 @@ import React from "react";
 import { Link } from "react-router-dom";
 import { MdLocationOn } from "react-icons/md";
 
-const ListingCard = ({ key, listing }) => {
+const ListingCard = ({ listing }) => {
   return (
     <div className="bg-white shadow-sm hover:shadow-md transition-shadow overflow-hidden rounded-lg">
       <Link to={`/listing/${listing._id}`}>
