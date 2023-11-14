@@ -62,7 +62,7 @@ const SignIn = () => {
           onChange={handleChange}
         />
         <input
-          type="text"
+          type="password"
           className="border border-black/20 rounded-lg p-3"
           placeholder="password"
           id="password"
